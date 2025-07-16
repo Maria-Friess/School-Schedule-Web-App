@@ -1,0 +1,8 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+  "workbench.preferredDarkColorTheme": "Default Dark+",
+  "workbench.preferredHighContrastLightColorTheme": "Default High Contrast Light",
+  "workbench.preferredHighContrastColorTheme": "Default Dark+",
+  "C_Cpp.vcFormat.indent.preserveWithinParentheses": true,
+  "screencastMode.mouseIndicatorColor": "#FF0000"
+}

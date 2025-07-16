@@ -20,7 +20,8 @@ from apiapp import models
 from apiapp.serializers import LevelSerializer, EduparallelSerializer
 from apiapp.serializers import SubjectSerializer, ComplexitySerializer
 from apiapp import serializers
-from apiapp import forms
+from apiapp import forms as forms_file
+from apiapp.services import form_funcs as ff
 
 
 class LevelViewSet(ModelViewSet):
@@ -82,7 +83,7 @@ def show_ga_solution(request):
 
 # Classroom Methods
 def classroom_list(request):
-    classrooms = models.Classroom.objects.all().order_by('name')
+    classrooms = ff.get_all(models.Classroom, 'name')
     return render(request, 'classroom/list_classroom.html', {'classrooms': classrooms})
 
 
@@ -91,28 +92,13 @@ def classroom_detail(request, pk):
     return render(request, 'classroom/detail_classroom.html', {'classroom': classroom})
 
 
-def classroom_add(request):
-    if request.method == "POST":
-        form = forms.ClassroomForm(request.POST)
-        if form.is_valid():
-            post = form.save()
-            post.save()
-            return redirect('classroom_list')
-    else:
-        form = forms.ClassroomForm()
+def classroom_add_or_edit(request, pk=None):   
+    classroom = get_object_or_404(models.Classroom, pk=pk) if pk else None
+    form = ff.add_or_edit(request, forms_file.ClassroomForm, classroom)
+    if not form:
+        return redirect('classroom_list')
     return render(request, 'classroom/edit_classroom.html', {'form': form})
 
-
-def classroom_edit(request, pk):
-    classroom = get_object_or_404(models.Classroom, pk=pk)
-    if request.method == "POST":
-        form = forms.ClassroomForm(request.POST, instance=classroom)
-        if form.is_valid():
-            form.save()
-            return redirect('classroom_list')
-    else:
-        form = forms.ClassroomForm(instance=classroom)
-    return render(request, 'classroom/edit_classroom.html', {'form': form})
 
 def classroom_delete(request, pk):
     models.Classroom.objects.filter(id=pk).delete()
@@ -122,34 +108,21 @@ def classroom_delete(request, pk):
 
 # Class Methods
 def class_list(request):
-    classes = models.Class.objects.all().order_by('eduparallel', 'letter')
+    classes = ff.get_all(models.Class, 'eduparallel', 'letter')
     return render(request, 'class/list_class.html', {'classes': classes})
+
 
 def class_detail(request, pk):
     class_obj = get_object_or_404(models.Class, pk=pk)
     return render(request, 'class/detail_class.html', {'class': class_obj})
 
-def class_add(request):
-    if request.method == "POST":
-        form = forms.ClassForm(request.POST)
-        if form.is_valid():
-            class_obj = form.save()
-            class_obj.save()
-            return redirect('class_list')
-    else:
-        form = forms.ClassForm()
+def class_add_or_edit(request, pk=None):   
+    class_obj = get_object_or_404(models.Class, pk=pk) if pk else None
+    form = ff.add_or_edit(request, forms_file.ClassForm, class_obj)
+    if not form:
+        return redirect('class_list')
     return render(request, 'class/edit_class.html', {'form': form})
 
-def class_edit(request, pk):
-    class_get_obj = get_object_or_404(models.Class, pk=pk)
-    if request.method == "POST":
-        form = forms.ClassForm(request.POST, instance=class_get_obj)
-        if form.is_valid():
-            form.save()
-            return redirect('class_list')
-    else:
-        form = forms.ClassForm(instance=class_get_obj)
-    return render(request, 'class/edit_class.html', {'form': form})
 
 def class_delete(request, pk):
     models.Class.objects.filter(id=pk).delete()
@@ -159,36 +132,18 @@ def class_delete(request, pk):
 
 # Teacher Methods
 def teacher_list(request):
-    teachers = models.Teacher.objects.all().prefetch_related('subjects').order_by(
-        'surname', 
-        'first_name', 
-        'last_name'
-    )
+    teachers = ff.get_all(models.Teacher, 'surname', 'first_name', 'last_name').prefetch_related('subjects')
     return render(request, 'teacher/list_teacher.html', {'teachers': teachers})
 
 def teacher_detail(request, pk):
     teacher = get_object_or_404(models.Teacher, pk=pk)
     return render(request, 'teacher/detail_teacher.html', {'teacher': teacher})
 
-def teacher_add(request):
-    if request.method == "POST":
-        form = forms.TeacherForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teacher_list')
-    else:
-        form = forms.TeacherForm()
-    return render(request, 'teacher/edit_teacher.html', {'form': form})
-
-def teacher_edit(request, pk):
-    teacher = get_object_or_404(models.Teacher, pk=pk)
-    if request.method == "POST":
-        form = forms.TeacherForm(request.POST, instance=teacher)
-        if form.is_valid():
-            form.save()
-            return redirect('teacher_list')
-    else:
-        form = forms.TeacherForm(instance=teacher)
+def teacher_add_or_edit(request, pk=None):   
+    teacher = get_object_or_404(models.Teacher, pk=pk) if pk else None
+    form = ff.add_or_edit(request, forms_file.TeacherForm, teacher)
+    if not form:
+        return redirect('teacher_list')
     return render(request, 'teacher/edit_teacher.html', {'form': form})
 
 def teacher_delete(request, pk):
@@ -197,8 +152,10 @@ def teacher_delete(request, pk):
 
 
 
+# Lesson Methods
+
 
 
 def add_schooluser(request):
-    form = forms.SchoolUserForm()
+    form = forms_file.SchoolUserForm()
     return render(request, 'schooluser_edit.html', {'form': form})
