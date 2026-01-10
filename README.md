@@ -33,7 +33,7 @@
 В базе данных изначально хранятся данные о списке предметов, их сложности и количестве требуемых академических часов в неделю для каждой параллели. Эти данные берутся из word-файла. Если в школе есть предметы не из списка обязательных, то пользователь может добавить их самостоятельно. <br>
 Пользователь самостоятельно заполняет данные о классах, учителях и кабинетах. <br><br>
 
-<img src='https://github.com/Maria-Friess/School-Schedule-Web-App/blob/ca6f862fc748e85a5019d85d193a81365b0973f4/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B4%D0%BB%D1%8F%20%D0%B3%D0%B8%D1%84.gif' width=600 align='center'><br>
+<img src='https://github.com/Maria-Friess/School-Schedule-Web-App/blob/ca6f862fc748e85a5019d85d193a81365b0973f4/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B4%D0%BB%D1%8F%20%D0%B3%D0%B8%D1%84.gif' width=800 align='center'><br>
 <sup>*Демонстрация работы приложения</sup><br>
 
 
